@@ -9,13 +9,13 @@ import { ProductList } from '../components/products';
 const Home: NextPage = () => {
   return (
     <ShopLayout title={'Teslo-Shop - Home'} pageDescription={'Encuentra los mejores productos de Teslo aquí'}>
-        <Typography variant='h1' component='h1'>Tienda</Typography>
-        <Typography variant='h2' sx={{ mb: 1 }}>Todos los productos</Typography>
+      <Typography variant='h1' component='h1'>Store</Typography>
+      <Typography variant='h2' sx={{ mb: 1 }}>All the products</Typography>
 
-        <ProductList 
-          products={ initialData.products as any }
-        />
-    
+      <ProductList
+        products={initialData.products as any}
+      />
+
 
     </ShopLayout>
   )

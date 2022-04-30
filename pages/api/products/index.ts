@@ -20,6 +20,8 @@ export default function handler(
   }
 }
 
+// http://localhost:3000/api/products?gender=women
+
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { gender = "all" } = req.query;
 

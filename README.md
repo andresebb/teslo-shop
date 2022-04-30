@@ -24,3 +24,6 @@ mongodb://localhost:27017/teslodb
 Rename the file **.env.template** to **.env**
 
 ## fill the databse with test information
+
+
+localhost:3000/api/seed

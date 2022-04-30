@@ -39,6 +39,7 @@ const productSchema = new Schema(
   }
 );
 
+//here
 productSchema.index({ title: "text", tags: "text" });
 
 const Product: Model<IProduct> =

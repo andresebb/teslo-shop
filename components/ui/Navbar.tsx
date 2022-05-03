@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { UiContext } from '../../context';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -5,6 +7,9 @@ import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography } fro
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
 
 export const Navbar = () => {
+
+    const { toggleSideMenu } = useContext(UiContext)
+
 
     const { pathname } = useRouter()
 
@@ -34,7 +39,7 @@ export const Navbar = () => {
                     </NextLink>
                     <NextLink href='/category/kid' passHref>
                         <Link>
-                            <Button color={pathname === "/category/kid" ? "primary" : "info"}>Kids</Button>
+                            <Button color={pathname === "/category/kid" ? "primary" : "info"}>Kid</Button>
                         </Link>
                     </NextLink>
                 </Box>
@@ -57,7 +62,7 @@ export const Navbar = () => {
                 </NextLink>
 
 
-                <Button>
+                <Button onClick={() => toggleSideMenu()}>
                     Menu
                 </Button>
 

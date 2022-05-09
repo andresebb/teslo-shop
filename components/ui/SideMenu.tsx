@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
@@ -8,9 +8,17 @@ import { useRouter } from "next/router"
 
 export const SideMenu = () => {
 
+    const router = useRouter()
     const { isMenuOpen, toggleSideMenu } = useContext(UiContext)
 
-    const router = useRouter()
+    const [searchTerm, setSearchTerm] = useState("")
+
+    const onSearchTerm = () => {
+        if (searchTerm.trim().length === 0) return
+
+        navigateTo(`/search/${searchTerm}`)
+    }
+
 
     const navigateTo = (url: string) => {
         toggleSideMenu()
@@ -21,6 +29,7 @@ export const SideMenu = () => {
         <Drawer
             open={isMenuOpen}
             onClose={toggleSideMenu}
+            onKeyPress={(e) => e.key === "Enter" ? onSearchTerm() : null}
             anchor='right'
             sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}
         >
@@ -30,12 +39,14 @@ export const SideMenu = () => {
 
                     <ListItem>
                         <Input
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             type='text'
                             placeholder="Search..."
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
-                                        aria-label="toggle password visibility"
+                                        onClick={onSearchTerm}
                                     >
                                         <SearchOutlined />
                                     </IconButton>

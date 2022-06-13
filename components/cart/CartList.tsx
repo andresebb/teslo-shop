@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import NextLink from 'next/link';
 import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '@mui/material';
 
@@ -17,6 +17,8 @@ interface Props {
 
 export const CartList: FC<Props> = ({ editable = false }) => {
 
+    const { cart } = useContext(CartContext);
+    
     return (
         <>
             {

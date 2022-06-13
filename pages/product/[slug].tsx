@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { ProductSlideshow, SizeSelector } from '../../components/products';
@@ -11,6 +12,7 @@ import { IProduct } from '../../interfaces/products';
 import { dbProducts } from '../../database';
 import { useProducts } from '../../hooks';
 import { ICartProduct, ISize } from '../../interfaces';
+import { CartContext } from '../../context';
 
 
 interface Props {
@@ -23,6 +25,9 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   // const router = useRouter();
   // const { products: product, isLoading } = useProducts(`/products/${router.query.slug}`)
 
+  const { addProductToCart } = useContext(CartContext)
+  const router = useRouter()
+
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,
     image: product.images[0],
@@ -31,11 +36,15 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     slug: product.slug,
     title: product.title,
     gender: product.gender,
-    quantity: 1,
+    quantity: 8,
   })
 
 
   const onAddProduct = () => {
+    if (!tempCartProduct.size) return
+
+    addProductToCart(tempCartProduct)
+    router.push("/cart")
 
   }
 
@@ -43,6 +52,13 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     setTempCartProduct({
       ...tempCartProduct,
       size
+    })
+  }
+
+  const updateQuantity = (quantity: number) => {
+    setTempCartProduct({
+      ...tempCartProduct,
+      quantity
     })
   }
 
@@ -68,7 +84,11 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             {/* Quantity */}
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Quantity</Typography>
-              <ItemCounter />
+              <ItemCounter
+                currentValue={tempCartProduct.quantity}
+                updatedQuantity={(quantity) => updateQuantity(quantity)}
+                maxValue={5}
+              />
               <SizeSelector
                 selectedSize={tempCartProduct.size}
                 sizes={product.sizes}

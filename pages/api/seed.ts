@@ -25,6 +25,6 @@ export default async function handler(
   await db.disconnect();
 
   res.status(200).json({
-    message: "All Good",
+    message: "All Good, yes sr",
   });
 }

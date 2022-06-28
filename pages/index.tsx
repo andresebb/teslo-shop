@@ -16,7 +16,6 @@ const HomePage: NextPage = () => {
     <ShopLayout title={'Teslo-Shop - Home'} pageDescription={'Find the best products of teslo here'}>
       <Typography variant='h1' component='h1'>Store</Typography>
       <Typography variant='h2' sx={{ mb: 1 }}>All the products</Typography>
-
       {
         isLoading
           ? (<FullScreenLoading />)
@@ -24,9 +23,6 @@ const HomePage: NextPage = () => {
             products={products}
           />)
       }
-
-
-
     </ShopLayout>
   )
 }

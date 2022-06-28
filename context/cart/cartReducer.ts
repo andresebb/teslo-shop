@@ -18,7 +18,7 @@ export const cartReducer = (
     case "[Cart] - Add Product": {
       return {
         ...state,
-        cart: action.payload,
+        cart: [action.payload],
       };
     }
     default:

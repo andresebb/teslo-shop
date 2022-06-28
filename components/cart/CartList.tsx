@@ -4,6 +4,7 @@ import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '
 
 import { initialData } from '../../database/products';
 import { ItemCounter } from '../ui';
+import { CartContext } from '../../context';
 
 const productsInCart = [
     initialData.products[0],
@@ -18,7 +19,7 @@ interface Props {
 export const CartList: FC<Props> = ({ editable = false }) => {
 
     const { cart } = useContext(CartContext);
-    
+
     return (
         <>
             {

@@ -25,6 +25,8 @@ export default function handler(
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { gender = "all" } = req.query;
 
+  console.log("estamos en el proceso");
+
   let condition = {};
 
   // Make sure the gender includes our gender

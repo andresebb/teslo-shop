@@ -44,7 +44,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     if (!tempCartProduct.size) return
 
     addProductToCart(tempCartProduct)
-    router.push("/cart")
+    // router.push("/cart")
 
   }
 
@@ -87,7 +87,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
               <ItemCounter
                 currentValue={tempCartProduct.quantity}
                 updatedQuantity={(quantity) => updateQuantity(quantity)}
-                maxValue={5}
+                maxValue={product.inStock > 10 ? 10 : product.inStock}
               />
               <SizeSelector
                 selectedSize={tempCartProduct.size}

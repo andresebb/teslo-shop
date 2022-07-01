@@ -22,8 +22,9 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 
     return (
         <>
+
             {
-                productsInCart.map(product => (
+                cart.map(product => (
                     <Grid container spacing={2} key={product.slug} sx={{ mb: 1 }}>
                         <Grid item xs={3}>
                             {/* TODO: llevar a la página del producto */}
@@ -31,7 +32,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                                 <Link>
                                     <CardActionArea>
                                         <CardMedia
-                                            image={`/products/${product.images[0]}`}
+                                            image={`/products/${product.image}`}
                                             component='img'
                                             sx={{ borderRadius: '5px' }}
                                         />
@@ -46,8 +47,8 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 
                                 {
                                     editable
-                                        ? <ItemCounter />
-                                        : <Typography variant='h5'>3 items</Typography>
+                                        ? <ItemCounter currentValue={product.quantity} maxValue={10} updatedQuantity={() => { }} />
+                                        : <Typography variant='h5'>{product.quantity} {product.quantity > 1 ? "products" : "producto"}</Typography>
                                 }
 
                             </Box>

@@ -57,11 +57,22 @@ export const CartProvider: FC = ({ children }) => {
     dispatch({ type: '[Cart] - Change cart quantity', payload: product });
   }
 
+  const removeCartProduct = (product: ICartProduct) => {
+
+    const newProducts = state.cart.filter((p) => {
+      if (p._id !== product._id) return p
+      if (p.size !== product.size) return p
+
+    })
+    dispatch({ type: '[Cart] - Remove product in cart', payload: newProducts });
+  }
+
   return (
     <CartContext.Provider value={{
       ...state,
       addProductToCart,
       updateCartQuantity,
+      removeCartProduct,
     }}>
       {children}
     </CartContext.Provider>

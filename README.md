@@ -1,20 +1,16 @@
 # Teslo Shop
 
-## Install Node Modules
+## To run locally you need the database.
 
-```
-  yarn install
-```
+### Choose one option
 
-## Two options:
-
-### 1 Create container in docker for our development database
+#### 1 Create container in docker for our development database
 
 ```
 docker-compose up -d
 ```
 
-### 2 Create a database in mongo Atlas and not use docker
+#### 2 Create a database in mongo Atlas and not use docker
 
 ### MONGO COMPASS URL
 
@@ -25,6 +21,13 @@ mongodb://localhost:27017/teslodb
 ## Config env variables
 
 Rename the file **.env.template** to **.env**
+
+## Install Node Modules and run app
+
+```
+  yarn install
+  yarn dev
+```
 
 ## fill the databse with test information
 

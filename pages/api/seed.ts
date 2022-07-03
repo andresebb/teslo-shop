@@ -13,7 +13,7 @@ export default async function handler(
 ) {
   if (process.env.NODE_ENV === "production") {
     return res.status(401).json({
-      message: "You don't have access to thsi service",
+      message: "You don't have access to this service",
     });
   }
 

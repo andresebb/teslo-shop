@@ -1,12 +1,15 @@
 import { useState, useContext } from "react"
 import NextLink from 'next/link';
-import { useForm } from 'react-hook-form';
 import { useRouter } from "next/router";
 
+import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import { ErrorOutline } from '@mui/icons-material';
 
-import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
+
 import { AuthLayout } from '../../components/layouts'
 import { validations } from '../../utils';
+import { tesloApi } from "../../api";
 
 type FormData = {
     email: string,
@@ -21,8 +24,19 @@ const LoginPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
     const [showError, setShowError] = useState(false);
 
-    const onLoginUser = async (data: FormData) => {
-        console.log({ data })
+    const onLoginUser = async ({ email, password }: FormData) => {
+        setShowError(false);
+
+        try {
+            const { data } = await tesloApi.post('/user/login', { email, password })
+            const { token, user } = data;
+            console.log({ token, user });
+        }
+        catch (error) {
+            console.log("Error in the credential");
+            setShowError(true);
+            setTimeout(() => setShowError(false), 30001);
+        }
     }
 
     return (
@@ -34,6 +48,13 @@ const LoginPage = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Typography variant='h1' component="h1">Sign In</Typography>
+                            <Chip
+                                label="User or password not valid"
+                                color="error"
+                                icon={<ErrorOutline />}
+                                className="fadeIn"
+                                sx={{ display: showError ? 'flex' : 'none' }}
+                            />
                         </Grid>
 
                         <Grid item xs={12}>

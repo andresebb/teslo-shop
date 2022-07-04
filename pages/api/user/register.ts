@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 import { db } from "../../../database";
 import { User } from "../../../models";
-import { jwt } from "../../../utils";
+import { jwt, validations } from "../../../utils";
 
 type Data =
   | { message: string }
@@ -53,11 +53,12 @@ const registerUser = async (
     });
   }
 
-  // if (!validations.isValidEmail(email)) {
-  //   return res.status(400).json({
-  //     message: "El correo no tiene formato de correo",
-  //   });
-  // }
+  //Valid email
+  if (!validations.isValidEmail(email)) {
+    return res.status(400).json({
+      message: "The email does look like a email",
+    });
+  }
 
   await db.connect();
   const user = await User.findOne({ email });

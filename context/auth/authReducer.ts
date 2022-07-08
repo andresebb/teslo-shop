@@ -5,7 +5,7 @@ type AuthActionType =
   | { type: "[Auth] - Login"; payload: IUser }
   | { type: "[Auth] - Logout" };
 
-export const AuthReducer = (
+export const authReducer = (
   state: AuthState,
   action: AuthActionType
 ): AuthState => {
@@ -22,6 +22,7 @@ export const AuthReducer = (
         isLoggedIn: false,
         user: undefined,
       };
+
     default:
       return state;
   }

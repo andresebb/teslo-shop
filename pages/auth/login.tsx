@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { ErrorOutline } from '@mui/icons-material';
 
 
+import { AuthContext } from "../../context";
 import { AuthLayout } from '../../components/layouts'
 import { validations } from '../../utils';
 import { tesloApi } from "../../api";
@@ -19,7 +20,7 @@ type FormData = {
 const LoginPage = () => {
 
     const router = useRouter()
-    // const { loginUser } = useContext(AuthContext);
+    const { loginUser } = useContext(AuthContext);
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
     const [showError, setShowError] = useState(false);
@@ -27,16 +28,16 @@ const LoginPage = () => {
     const onLoginUser = async ({ email, password }: FormData) => {
         setShowError(false);
 
-        try {
-            const { data } = await tesloApi.post('/user/login', { email, password })
-            const { token, user } = data;
-            console.log({ token, user });
-        }
-        catch (error) {
-            console.log("Error in the credential");
+        const isValidLogin = await loginUser(email, password)
+
+        if (!isValidLogin) {
             setShowError(true);
-            setTimeout(() => setShowError(false), 30001);
+            setTimeout(() => setShowError(false), 3000);
+            return;
         }
+
+        // Todo: navegar a la pantalla que el usuario estaba
+        router.replace('/');
     }
 
     return (
@@ -69,7 +70,6 @@ const LoginPage = () => {
                         <Grid item xs={12}>
                             <TextField type="password" label="Password" variant="filled" fullWidth {...register('password', {
                                 required: 'This field is required',
-                                minLength: { value: 6, message: 'Min 6 characters' }
                             })}
                                 error={!!errors.password}
                                 helperText={errors.password?.message} />

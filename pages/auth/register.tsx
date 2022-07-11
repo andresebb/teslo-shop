@@ -78,7 +78,7 @@ const RegisterPage = () => {
                         <Grid item xs={12}>
                             <TextField label="Password" type='password' variant="filled" fullWidth {...register('password', {
                                 required: 'This field is required',
-                                minLength: { value: 6, message: 'Mínimo 6 characters' }
+                                minLength: { value: 6, message: 'Mín 6 characters' }
                             })}
                                 error={!!errors.password}
                                 helperText={errors.password?.message} />

@@ -1,12 +1,25 @@
+import { useContext } from 'react';
 import NextLink from 'next/link';
 
 import { Link, Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 
+import { CartContext } from '../../context';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { CartList, OrderSummary } from '../../components/cart';
+import { countries } from '../../utils';
 
 
 const SummaryPage = () => {
+
+    const { shippingAddress, numberOfItems } = useContext(CartContext);
+
+    if (!shippingAddress) {
+        return <></>;
+    }
+
+    const { firstName, lastName, address, address2 = '', city, country, phone, zip } = shippingAddress;
+
+
     return (
         <ShopLayout title='Order Summary' pageDescription={'This is the order summary'}>
             <Typography variant='h1' component='h1'>Order Summary</Typography>
@@ -18,31 +31,30 @@ const SummaryPage = () => {
                 <Grid item xs={12} sm={5}>
                     <Card className='summary-card'>
                         <CardContent>
-                            <Typography variant='h2'>Summary (3 products)</Typography>
+                            <Typography variant='h2'>Summary  ({numberOfItems} {numberOfItems === 1 ? 'product' : 'products'})</Typography>
                             <Divider sx={{ my: 1 }} />
 
                             <Box display='flex' justifyContent='space-between'>
                                 <Typography variant='subtitle1'>Order Address</Typography>
                                 <NextLink href='/checkout/address' passHref>
                                     <Link underline='always'>
-                                        Editar
+                                        Edit
                                     </Link>
                                 </NextLink>
                             </Box>
 
 
-                            <Typography>Fernando Herrera</Typography>
-                            <Typography>323 Algun lugar</Typography>
-                            <Typography>Stittsville, HYA 23S</Typography>
-                            <Typography>Canadá</Typography>
-                            <Typography>+1 23123123</Typography>
-
+                            <Typography>{firstName} {lastName}</Typography>
+                            <Typography>{address}{address2 ? `, ${address2}` : ''} </Typography>
+                            <Typography>{city}, {zip}</Typography>
+                            <Typography>{countries.find(c => c.code === country)?.name}</Typography>
+                            <Typography>{phone}</Typography>
                             <Divider sx={{ my: 1 }} />
 
                             <Box display='flex' justifyContent='end'>
                                 <NextLink href='/cart' passHref>
                                     <Link underline='always'>
-                                        Editar
+                                        Edit
                                     </Link>
                                 </NextLink>
                             </Box>

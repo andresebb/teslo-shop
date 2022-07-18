@@ -29,7 +29,7 @@ export const AuthProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIALSTATE);
   const router = useRouter();
 
-  console.log({ router })
+  // console.log({ router })
 
   useEffect(() => {
     if (status === 'authenticated') {

@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react';
 import NextLink from 'next/link';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { signIn, getSession } from 'next-auth/react';
 
 import { useForm } from 'react-hook-form';
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
@@ -38,7 +40,8 @@ const RegisterPage = () => {
             return;
         }
 
-        router.replace('/');
+        await signIn('credentials', { email, password });
+        // router.replace('/');
     }
 
     return (
@@ -103,6 +106,30 @@ const RegisterPage = () => {
 
         </AuthLayout>
     )
+}
+
+
+//Redirect and dont allow screen to no users
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+
+    const session = await getSession({ req });
+    // console.log({session});
+
+    const { p = '/' } = query;
+
+    if (session) {
+        return {
+            redirect: {
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+
+    return {
+        props: {}
+    }
 }
 
 export default RegisterPage

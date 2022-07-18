@@ -1,10 +1,15 @@
 import { FC, useEffect, useReducer } from 'react';
 import { useRouter } from 'next/router';
+import {
+  useSession,
+  signOut
+} from 'next-auth/react';
+
 
 import Cookies from 'js-cookie';
+import axios, { AxiosError } from 'axios';
 
 import { tesloApi } from '../../api';
-import axios, { AxiosError } from 'axios';
 import { IUser } from '../../interfaces';
 
 import { AuthContext, authReducer } from './';
@@ -20,13 +25,25 @@ const AUTH_INITIALSTATE: AuthState = {
 
 export const AuthProvider: FC = ({ children }) => {
 
+  const { data, status } = useSession();
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIALSTATE);
   const router = useRouter();
 
+  console.log({ router })
 
   useEffect(() => {
-    checkToken();
-  }, [])
+    if (status === 'authenticated') {
+      console.log({ user: data?.user });
+      dispatch({ type: '[Auth] - Login', payload: data?.user as IUser })
+    }
+
+  }, [status, data])
+
+
+  // We dont need our token anymore, due we are working with nextauth
+  // useEffect(() => {
+  //   checkToken();
+  // }, [])
 
 
   const checkToken = async () => {
@@ -58,7 +75,6 @@ export const AuthProvider: FC = ({ children }) => {
   }
 
   const logoutUser = () => {
-    Cookies.remove('token');
     Cookies.remove('cart');
     Cookies.remove('firstName');
     Cookies.remove('lastName');
@@ -68,7 +84,11 @@ export const AuthProvider: FC = ({ children }) => {
     Cookies.remove('city');
     Cookies.remove('country');
     Cookies.remove('phone');
-    router.reload();
+
+
+    signOut();
+    // Cookies.remove('token');
+    // router.reload();
   }
 
   const registerUser = async (name: string, email: string, password: string): Promise<{ hasError: boolean; message?: string }> => {

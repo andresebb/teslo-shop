@@ -1,6 +1,8 @@
 import { useState, useContext } from "react"
 import NextLink from 'next/link';
+import { GetServerSideProps } from 'next'
 import { useRouter } from "next/router";
+import { signIn, getSession, getProviders } from 'next-auth/react';
 
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
@@ -28,17 +30,19 @@ const LoginPage = () => {
     const onLoginUser = async ({ email, password }: FormData) => {
         setShowError(false);
 
-        const isValidLogin = await loginUser(email, password)
+        // const isValidLogin = await loginUser(email, password)
 
-        if (!isValidLogin) {
-            setShowError(true);
-            setTimeout(() => setShowError(false), 3000);
-            return;
-        }
+        // if (!isValidLogin) {
+        //     setShowError(true);
+        //     setTimeout(() => setShowError(false), 3000);
+        //     return;
+        // }
 
-        //change navegator url
-        const destination = router.query.p?.toString() || '/';
-        router.replace(destination);
+        // //change navegator url
+        // const destination = router.query.p?.toString() || '/';
+        // router.replace(destination);
+
+        await signIn('credentials', { email, password });
     }
 
     return (
@@ -96,4 +100,27 @@ const LoginPage = () => {
     )
 }
 
-export default LoginPage
+//Redirect when ssesion is active
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+
+    const session = await getSession({ req });
+    // console.log({session});
+
+    const { p = '/' } = query;
+
+    if (session) {
+        return {
+            redirect: {
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+
+    return {
+        props: {}
+    }
+};
+
+export default LoginPage;

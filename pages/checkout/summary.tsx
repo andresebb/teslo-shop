@@ -1,20 +1,28 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
-
+import { useRouter } from 'next/router';
 import { Link, Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import { GetServerSideProps } from 'next';
 
 import { CartContext } from '../../context';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { CartList, OrderSummary } from '../../components/cart';
 import { countries } from '../../utils';
-
+import Cookies from 'js-cookie';
 
 const SummaryPage = () => {
 
+    const router = useRouter()
     const { shippingAddress, numberOfItems } = useContext(CartContext);
 
+    useEffect(() => {
+        if (!Cookies.get('firstName')) {
+            router.push('/checkout/address');
+        }
+    }, [router]);
+
     if (!shippingAddress) {
-        return <></>;
+        return <h1>There is not shipping addres</h1>;
     }
 
     const { firstName, lastName, address, address2 = '', city, country, phone, zip } = shippingAddress;
@@ -76,5 +84,6 @@ const SummaryPage = () => {
         </ShopLayout>
     )
 }
+
 
 export default SummaryPage;

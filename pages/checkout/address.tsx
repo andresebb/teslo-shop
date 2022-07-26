@@ -148,31 +148,33 @@ const AddressPage = () => {
 // - Only if you need to pre-render a page whose data must be fetched at request time
 
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const { token = '' } = req.cookies  // your fetch function here 
-    let isValidToken = false
+//We are not usign our token anymore.
 
-    try {
-        await jwt.isValidToken(token);
-        isValidToken = true;
-    } catch (error) {
-        isValidToken = false;
-    }
+// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+//     const { token = '' } = req.cookies  // your fetch function here 
+//     let isValidToken = false
 
-    if (!isValidToken) {
-        return {
-            redirect: {
-                destination: '/auth/login?p=/checkout/address',
-                permanent: false,
-            }
-        }
-    }
+//     try {
+//         await jwt.isValidToken(token);
+//         isValidToken = true;
+//     } catch (error) {
+//         isValidToken = false;
+//     }
 
-    return {
-        props: {
+//     if (!isValidToken) {
+//         return {
+//             redirect: {
+//                 destination: '/auth/login?p=/checkout/address',
+//                 permanent: false,
+//             }
+//         }
+//     }
 
-        }
-    }
-}
+//     return {
+//         props: {
+
+//         }
+//     }
+// }
 
 export default AddressPage

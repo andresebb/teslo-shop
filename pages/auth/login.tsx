@@ -131,13 +131,14 @@ const LoginPage = () => {
     )
 }
 
-//Redirect when ssesion is active
+//Redirect when ssesion is LoggedIn
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
 
     const session = await getSession({ req });
     // console.log({session});
 
     const { p = '/' } = query;
+
 
     if (session) {
         return {

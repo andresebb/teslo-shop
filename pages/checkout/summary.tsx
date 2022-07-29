@@ -13,7 +13,7 @@ import Cookies from 'js-cookie';
 const SummaryPage = () => {
 
     const router = useRouter()
-    const { shippingAddress, numberOfItems } = useContext(CartContext);
+    const { shippingAddress, numberOfItems, createOrder } = useContext(CartContext);
 
     useEffect(() => {
         if (!Cookies.get('firstName')) {
@@ -27,6 +27,9 @@ const SummaryPage = () => {
 
     const { firstName, lastName, address, address2 = '', city, country, phone, zip } = shippingAddress;
 
+    const onCreateOrder = () => {
+        createOrder()
+    }
 
     return (
         <ShopLayout title='Order Summary' pageDescription={'This is the order summary'}>
@@ -69,8 +72,8 @@ const SummaryPage = () => {
 
                             <OrderSummary />
 
-                            <Box sx={{ mt: 3 }}>
-                                <Button color="secondary" className='circular-btn' fullWidth>
+                            <Box sx={{ mt: 3 }} >
+                                <Button color="secondary" className='circular-btn' onClick={onCreateOrder} fullWidth>
                                     Confirm Order
                                 </Button>
                             </Box>

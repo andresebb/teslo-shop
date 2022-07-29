@@ -31,9 +31,11 @@ export const AuthProvider: FC = ({ children }) => {
 
   // console.log({ router })
 
+
+  //This is all we need, we are using nextAuth now.
   useEffect(() => {
     if (status === 'authenticated') {
-      console.log({ user: data?.user });
+      // console.log({ user: data?.user });
       dispatch({ type: '[Auth] - Login', payload: data?.user as IUser })
     }
 

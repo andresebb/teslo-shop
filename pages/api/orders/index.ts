@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = { message: string };
+type Data = { message: any };
 
 export default function handler(
   req: NextApiRequest,
@@ -18,9 +18,9 @@ export default function handler(
 }
 
 const createOrder = (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  console.log("here we are");
+  const body = req.body;
 
   return res.status(200).json({
-    message: "All good",
+    message: body,
   });
 };

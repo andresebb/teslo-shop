@@ -6,6 +6,7 @@ import { ICartProduct } from '../../interfaces';
 import { CartContext, cartReducer } from './';
 import { IOrder, ShippingAddress } from '../../interfaces';
 import { tesloApi } from '../../api';
+import axios from 'axios';
 
 
 export interface CartState {
@@ -140,10 +141,10 @@ export const CartProvider: FC = ({ children }) => {
     dispatch({ type: '[Cart] - Update Address', payload: address });
   }
 
-  const createOrder = async () => {
+  const createOrder = async (): Promise<{ hasError: boolean; message: string; }> => {
 
     if (!state.shippingAddress) {
-      throw new Error('No hay dirección de entrega');
+      throw new Error('No Shipping address');
     }
 
     const body: IOrder = {
@@ -159,13 +160,34 @@ export const CartProvider: FC = ({ children }) => {
       isPaid: false
     }
 
+
     try {
-      const { data } = await tesloApi.post('/orders', body)
-      console.log({ data })
+
+      const { data } = await tesloApi.post<IOrder>('/orders', body);
+
+      dispatch({ type: '[Cart] - Order complete' });
+
+      return {
+        hasError: false,
+        message: data._id!
+      }
+
+
     } catch (error) {
-      console.log(error)
-      console.log("till here")
+
+      if (axios.isAxiosError(error as any)) {
+        return {
+          hasError: true,
+          message: "Error axios"
+        }
+      }
+
+      return {
+        hasError: true,
+        message: 'Talk to admin'
+      }
     }
+
   }
 
 

@@ -10,6 +10,7 @@ import { CartList, OrderSummary } from '../../components/cart';
 import { getSession } from 'next-auth/react';
 import { dbOrders } from '../../database';
 import { IOrder } from '../../interfaces';
+import { ShippingAddress } from '../../interfaces/order';
 
 interface Props {
     order: IOrder;
@@ -17,76 +18,85 @@ interface Props {
 
 const OrderPage: NextPage<Props> = ({ order }) => {
 
-    // console.log(order)
+    const { shippingAddress } = order;
 
     return (
-        <ShopLayout title='Order Summary 123671523' pageDescription={'Resumen de la orden'}>
-            <Typography variant='h1' component='h1'>Order: ABC123</Typography>
+        <ShopLayout title='Order Summary' pageDescription={'Order Summary'}>
+            <Typography variant='h1' component='h1'>Order: {order._id}</Typography>
 
-            {/* <Chip 
-            sx={{ my: 2 }}
-            label="Order not payed"
-            variant='outlined'
-            color="error"
-            icon={ <CreditCardOffOutlined /> }
-        /> */}
-            <Chip
-                sx={{ my: 2 }}
-                label="Order payed"
-                variant='outlined'
-                color="success"
-                icon={<CreditScoreOutlined />}
-            />
+            {
+                order.isPaid
+                    ? (
+                        <Chip
+                            sx={{ my: 2 }}
+                            label="Order paid"
+                            variant='outlined'
+                            color="success"
+                            icon={<CreditScoreOutlined />}
+                        />
+                    ) :
+                    (
+                        <Chip
+                            sx={{ my: 2 }}
+                            label="Pending Paid"
+                            variant='outlined'
+                            color="error"
+                            icon={<CreditCardOffOutlined />}
+                        />
+                    )
+            }
 
-            <Grid container>
+            <Grid container className='fadeIn'>
                 <Grid item xs={12} sm={7}>
-                    <CartList />
+                    <CartList products={order.orderItems} />
                 </Grid>
                 <Grid item xs={12} sm={5}>
                     <Card className='summary-card'>
                         <CardContent>
-                            <Typography variant='h2'>Summary (3 products)</Typography>
+                            <Typography variant='h2'>Summay ({order.numberOfItems} {order.numberOfItems > 1 ? 'products' : 'product'})</Typography>
                             <Divider sx={{ my: 1 }} />
 
                             <Box display='flex' justifyContent='space-between'>
-                                <Typography variant='subtitle1'>Order Address</Typography>
-                                <NextLink href='/checkout/address' passHref>
-                                    <Link underline='always'>
-                                        Editar
-                                    </Link>
-                                </NextLink>
+                                <Typography variant='subtitle1'>Shipping Address</Typography>
                             </Box>
 
 
-                            <Typography>Fernando Herrera</Typography>
-                            <Typography>323 Algun lugar</Typography>
-                            <Typography>Stittsville, HYA 23S</Typography>
-                            <Typography>Canadá</Typography>
-                            <Typography>+1 23123123</Typography>
+                            <Typography>{shippingAddress.firstName} {shippingAddress.lastName}</Typography>
+                            <Typography>{shippingAddress.address} {shippingAddress.address2 ? `, ${shippingAddress.address2}` : ''}</Typography>
+                            <Typography>{shippingAddress.city}, {shippingAddress.zip}</Typography>
+                            <Typography>{shippingAddress.country}</Typography>
+                            <Typography>{shippingAddress.phone}</Typography>
 
                             <Divider sx={{ my: 1 }} />
 
-                            <Box display='flex' justifyContent='end'>
-                                <NextLink href='/cart' passHref>
-                                    <Link underline='always'>
-                                        Editar
-                                    </Link>
-                                </NextLink>
-                            </Box>
 
-                            <OrderSummary />
+                            <OrderSummary
+                                orderValues={{
+                                    numberOfItems: order.numberOfItems,
+                                    subTotal: order.subTotal,
+                                    total: order.total,
+                                    tax: order.tax,
+                                }}
+                            />
 
-                            <Box sx={{ mt: 3 }}>
+                            <Box sx={{ mt: 3 }} display="flex" flexDirection='column'>
                                 {/* TODO */}
-                                <h1>Pay</h1>
+                                {
+                                    order.isPaid
+                                        ? (
+                                            <Chip
+                                                sx={{ my: 2 }}
+                                                label="Order paid"
+                                                variant='outlined'
+                                                color="success"
+                                                icon={<CreditScoreOutlined />}
+                                            />
 
-                                <Chip
-                                    sx={{ my: 2 }}
-                                    label="Order payed"
-                                    variant='outlined'
-                                    color="success"
-                                    icon={<CreditScoreOutlined />}
-                                />
+                                        ) : (
+                                            <h1>Pay</h1>
+                                        )
+                                }
+
                             </Box>
 
                         </CardContent>

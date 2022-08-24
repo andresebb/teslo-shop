@@ -69,12 +69,12 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 
   //Petition to paypal to confirm that transactionId is paid
-  //PayaplBearToken does not work on the header, thats why we put it on cold
+  //PayaplBearToken does not work on this request, why?
     const { data } = await axios.get<IPaypal.PaypalOrderStatusResponse>(
       `https://api.sandbox.paypal.com/v2/checkout/orders/${transactionId}`,
       {
         headers: {
-          Authorization: `Bearer A21AAKJTdFBg4EEpKkoQu9h4bl0K7SldMwMGKiAjfWnJBZnabDO42tjwnZ-T_PVRP9-WRskZkKqMbBvIat62kGLbhhUT4gN1A`,
+          "Authorization": `Bearer ${paypalBearerToken}`,
         },
       }
     );
